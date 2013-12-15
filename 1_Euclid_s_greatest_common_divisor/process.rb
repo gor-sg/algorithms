@@ -1,18 +1,30 @@
 require 'optparse'
 
-options = {}
+@options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: example.rb [options]"
+  opts.banner = "Usage: process.rb [options]"
 
   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-    options[:verbose] = v
+    @options[:verbose] = v
   end
 end.parse!
 
+def o(str)
+  puts str if @options[:verbose]
+end
+
 def process(p, q)
-  return p if q == 0
-  r = p % q
-  return process(q, r)
+  o "p = #{p}, q = #{q}"
+ 
+  if q == 0
+    o "q = 0. p = #{p} is greatest common divisor"
+    p
+  else
+    r = p % q
+    o "p % q = #{r}"
+    o "calculate for #{q} and #{r}"
+    process(q, r)
+  end
 end
 
 gcd = process(*ARGV.map(&:to_i))
